@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { ApiRequest } from "@/apiRequest/auth";
+import axios from "axios";
+import { ApiRequests } from "@/apiRequest/auth";
+import { message } from "antd";
+import { useRouter } from "next/router";
 
 const Login = () => {
+  const navigate = useRouter();
   const {
     handleSubmit,
     register,
@@ -15,17 +19,39 @@ const Login = () => {
 
     mode: "onChange",
   });
-  const submitHandler = (data) => {
-    alert("working");
-    console.log(data);
+
+  const submitHandler = async (data) => {
+    const { email, password } = data;
+    try {
+      const response = await ApiRequests.loginRequest({ email, password });
+
+      if (response.success) {
+        const token = response.token;
+        localStorage.setItem("token", token);
+        navigate.push("/dashboad");
+        message.success(response.message);
+      } else {
+        message.error(response.message);
+      }
+    } catch (error) {
+      message.error(error.message);
+    }
   };
 
-  //   const apiRequest = new ApiRequest();
+  //Redirect to dashboad if user exist
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate.push("/dashboad");
+    } else {
+      navigate.push("/auth/login");
+    }
+  }, []);
 
-  console.log(ApiRequest);
   return (
     <>
       <div className="h-screen flex justify-center items-center">
+        <h1 className="text-gray-700">Login</h1>
         <div className="w-[400px]">
           <form
             onSubmit={handleSubmit(submitHandler)}
@@ -39,7 +65,7 @@ const Login = () => {
               Email Address
             </label>
             <input
-              type="text"
+              type="email"
               className="py-3 px-4 outline-none placeholder:text-gray-500 border rounded focus:shadow-md mt-3"
               id="email"
               placeholder="Enter Email Address"
