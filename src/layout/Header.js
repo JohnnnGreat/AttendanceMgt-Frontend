@@ -23,7 +23,7 @@ export const NavItem = ({ navItem }) => {
 
 function Header() {
   return (
-    <div className="w-full h-[80px] shadow px-2 fixed top-0">
+    <div className="w-full z-10 bg-white h-[80px] shadow px-2 fixed top-0">
       <div className="wrapper max-w-[1000px] mx-auto flex justify-between items-center h-full">
         <div className="logo">
           <h1>AttendanceMgt</h1>

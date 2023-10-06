@@ -4,6 +4,7 @@ import axios from "axios";
 import { ApiRequests } from "@/apiRequest/auth";
 import { message } from "antd";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const Register = () => {
   const navigate = useRouter();
@@ -24,14 +25,15 @@ const Register = () => {
   });
 
   const submitHandler = async (data) => {
-    const { email, password } = data;
-    try {
-      const response = await ApiRequests.loginRequest({ email, password });
+    console.log(data);
 
+    try {
+      const response = await ApiRequests.signUpRequest(data);
+      console.log(response);
       if (response.success) {
         const token = response.token;
-        localStorage.setItem("token", token);
-        navigate.push("/dashboad");
+
+        navigate.push("/auth/login");
         message.success(response.message);
       } else {
         message.error(response.message);
@@ -40,6 +42,14 @@ const Register = () => {
       message.error(error.message);
     }
   };
+
+  //Redirect to dashboad if user exist
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate.push("/dashboad");
+    }
+  }, []);
 
   return (
     <>
@@ -52,14 +62,14 @@ const Register = () => {
             action=""
           >
             <label
-              className="text-yellow-600 font-bold text-2xl"
+              className="text-yellow-600 font-bold text-xl"
               htmlFor="username"
             >
               Username
             </label>
             <input
               type="text"
-              className="py-3 px-4 outline-none placeholder:text-gray-500 border rounded focus:shadow-md mt-3"
+              className="py-2 px-4 outline-none placeholder:text-gray-500 border rounded focus:shadow-md mt-1"
               id="username"
               placeholder="Email Address"
               {...register("userName", {
@@ -70,20 +80,20 @@ const Register = () => {
               })}
             />
             {errors.userName?.message && (
-              <p className="text-red-500 text-[15px]">
+              <p className="text-red-500 text-[13px]">
                 {errors.userName.message}
               </p>
             )}
             <label
               htmlFor="fullName"
-              className="text-yellow-600 font-bold text-2xl mt-4"
+              className="text-yellow-600 font-bold text-xl mt-2"
             >
               Fullname
             </label>
             <input
               type="text"
               id="fullName"
-              className="py-3 px-4 outline-none placeholder:text-gray-500 border rounded focus:shadow-md mt-3"
+              className="py-2 px-4 outline-none placeholder:text-gray-500 border rounded focus:shadow-md mt-1"
               {...register("fullName", {
                 required: {
                   value: true,
@@ -93,20 +103,20 @@ const Register = () => {
               placeholder="Full Name"
             />
             {errors.fullName?.message && (
-              <p className="text-red-500 text-[15px]">
+              <p className="text-red-500 text-[13px]">
                 {errors.fullName.message}
               </p>
             )}
             <label
               htmlFor="email"
-              className="text-yellow-600 font-bold text-2xl mt-4"
+              className="text-yellow-600 font-bold text-xl mt-2"
             >
               Email
             </label>
             <input
               type="email"
               id="email"
-              className="py-3 px-4 outline-none placeholder:text-gray-500 border rounded focus:shadow-md mt-3"
+              className="py-2 px-4 outline-none placeholder:text-gray-500 border rounded focus:shadow-md mt-1"
               {...register("email", {
                 required: {
                   value: true,
@@ -116,35 +126,69 @@ const Register = () => {
               placeholder="Email Address"
             />
             {errors.email?.message && (
-              <p className="text-red-500 text-[15px]">{errors.email.message}</p>
+              <p className="text-red-500 text-[13px]">{errors.email.message}</p>
             )}
             <label
-              htmlFor="email"
-              className="text-yellow-600 font-bold text-2xl mt-4"
+              htmlFor="admissionNo"
+              className="text-yellow-600 font-bold text-xl mt-2"
             >
-              Email
+              Admission No.
             </label>
             <input
-              type="email"
-              id="email"
-              className="py-3 px-4 outline-none placeholder:text-gray-500 border rounded focus:shadow-md mt-3"
-              {...register("email", {
+              type="text"
+              id="admissionNo"
+              className="py-2 px-4 outline-none placeholder:text-gray-500 border rounded focus:shadow-md mt-2"
+              {...register("admissionNo", {
                 required: {
                   value: true,
-                  message: "Email is required",
+                  message: "Admission No. is required",
                 },
               })}
-              placeholder="Email Address"
+              placeholder="Admission No."
             />
-            {errors.email?.message && (
-              <p className="text-red-500 text-[15px]">{errors.email.message}</p>
+            {errors.admissionNo?.message && (
+              <p className="text-red-500 text-[13px]">
+                {errors.admissionNo.message}
+              </p>
+            )}
+            <label
+              htmlFor="password"
+              className="text-yellow-600 font-bold text-xl mt-2"
+            >
+              Admission No.
+            </label>
+            <input
+              type="password"
+              id="password"
+              className="py-2 px-4 outline-none placeholder:text-gray-500 border rounded focus:shadow-md mt-2"
+              {...register("password", {
+                required: {
+                  value: true,
+                  message: "Password. is required",
+                },
+              })}
+              placeholder="Password."
+            />
+            {errors.admissionNo?.message && (
+              <p className="text-red-500 text-[13px]">
+                {errors.admissionNo.message}
+              </p>
             )}
             <button
               type="submit"
               className="bg-yellow-600 text-white text-center mt-4 rounded py-3 px-4 hover:opacity-70 transition-all duration-300"
             >
-              Login
+              Register
             </button>
+
+            <p className="text-center mt-5">
+              Already Register
+              <span className="inline-block ml-1">
+                <Link className="text-yellow-800 font-bold" href="/auth/login">
+                  Login
+                </Link>
+              </span>
+            </p>
           </form>
         </div>
       </div>

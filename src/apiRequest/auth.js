@@ -16,13 +16,17 @@ export const ApiRequests = {
     }
   },
 
-  signUpRequest: async function ({ payload }) {
+  signUpRequest: async function (payload) {
+    console.log(payload);
     try {
-      const response = await axios.post("/users/register", payload);
-      return response.success;
-    } catch (error) {
-      console.log(error);
-      throw new Error(err);
+      const response = await axios.post(
+        "http://localhost:3030/users/register",
+        payload
+      );
+      console.log(response);
+      return response.data;
+    } catch (err) {
+      throw new Error(err.response.data.message);
     }
   },
 };

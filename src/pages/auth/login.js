@@ -4,6 +4,7 @@ import axios from "axios";
 import { ApiRequests } from "@/apiRequest/auth";
 import { message } from "antd";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const Login = () => {
   const navigate = useRouter();
@@ -50,8 +51,8 @@ const Login = () => {
 
   return (
     <>
-      <div className="h-screen flex justify-center items-center">
-        <h1 className="text-gray-700">Login</h1>
+      <div className="h-screen flex flex-col justify-center items-center">
+        <h1 className="text-gray-700 text-4xl uppercase">Login</h1>
         <div className="w-[400px]">
           <form
             onSubmit={handleSubmit(submitHandler)}
@@ -108,6 +109,17 @@ const Login = () => {
             >
               Login
             </button>
+            <p className="text-center mt-5">
+              Not yet Register
+              <span className="inline-block ml-1">
+                <Link
+                  className="text-yellow-800 font-bold"
+                  href="/auth/register"
+                >
+                  Register
+                </Link>
+              </span>
+            </p>
           </form>
         </div>
       </div>
