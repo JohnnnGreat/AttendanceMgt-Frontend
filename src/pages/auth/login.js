@@ -25,11 +25,12 @@ const Login = () => {
     const { email, password } = data;
     try {
       const response = await ApiRequests.loginRequest({ email, password });
-
       if (response.success) {
+        const { password, ...data } = response.user;
         const token = response.token;
         localStorage.setItem("token", token);
-        navigate.push("/dashboad");
+        localStorage.setItem("profile", JSON.stringify(data));
+        navigate.push("/dashboard/students");
         message.success(response.message);
       } else {
         message.error(response.message);

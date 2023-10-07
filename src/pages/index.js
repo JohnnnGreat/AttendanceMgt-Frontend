@@ -3,7 +3,5 @@ import { Inter } from "next/font/google";
 import Layout from "@/layout";
 
 export default function Home() {
-  return <>
-  
-  </>;
+  return <></>;
 }
